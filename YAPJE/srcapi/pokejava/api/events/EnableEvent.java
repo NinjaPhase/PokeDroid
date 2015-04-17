@@ -5,7 +5,7 @@ package pokejava.api.events;
  * internal enable event hook which will be run every time the plugin is enabled.
  * 
  * @author PoketronHacker
- * @version 2015.04.17
+ * @version 1.0
  *
  */
 public interface EnableEvent {

@@ -1,5 +1,6 @@
 package exampleplugin;
 
+import pokejava.api.events.DisableEvent;
 import pokejava.api.events.EnableEvent;
 import pokejava.api.events.EventHandler;
 import pokejava.api.plugin.Plugin;
@@ -9,11 +10,12 @@ public class SamplePlugin {
 	
 	@EventHandler
 	public void onEnable(EnableEvent enableEvent) {
-		System.out.println("This Hook has been activated.");
+		System.out.println("The Plugin has been Enabled.");
 	}
 	
-	public void onDisable() {
-		
+	@EventHandler
+	public void onDisable(DisableEvent disableEvent) {
+		System.out.println("The Plugin has been Disabled.");
 	}
 	
 }

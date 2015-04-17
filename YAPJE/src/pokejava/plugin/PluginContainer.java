@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.Map;
 
+import pokejava.api.events.DisableEvent;
 import pokejava.api.events.EnableEvent;
 import pokejava.api.events.EventHandler;
 import pokejava.api.plugin.Plugin;
@@ -17,12 +18,12 @@ import pokejava.api.plugin.Plugin;
  *
  */
 public class PluginContainer {
-	
+
 	private Object instance;
 	private Plugin plugin;
-	
+
 	private Map<HookType, Method> hooks;
-	
+
 	/**
 	 * The container of this plugin.
 	 * 
@@ -39,7 +40,7 @@ public class PluginContainer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Gets the hook of a plugin
 	 * 
@@ -49,7 +50,7 @@ public class PluginContainer {
 	public Method getHook(HookType type) {
 		return this.hooks.get(type);
 	}
-	
+
 	/**
 	 * Parses the known hooks and adds them to the method list ready to be invoked.
 	 * @throws ClassNotFoundException 
@@ -58,28 +59,31 @@ public class PluginContainer {
 		Class<?> c = Class.forName(instance.getClass().getName());
 		for(Method m : c.getDeclaredMethods()) {
 			if(m.getAnnotation(EventHandler.class) != null) {
-				if(m.getParameterCount() == 1 && m.getParameters()[0].getType().equals(EnableEvent.class)) {
-					hooks.put(HookType.ENABLE_HOOK, m);
-					System.out.println("[" + plugin.name() + "] Added " + m.getName() + " to enable hook.");
-				} else {
-					System.err.println("[" + plugin.name() + "] Unable to determine event type.");
+				if(m.getParameterCount() == 1) {
+					if(m.getParameters()[0].getType().equals(EnableEvent.class)) {
+						hooks.put(HookType.ENABLE_HOOK, m);
+						System.out.println("[" + plugin.name() + "] Added " + m.getName() + " to enable hook.");
+					} else if(m.getParameters()[0].getType().equals(DisableEvent.class)) {
+						hooks.put(HookType.DISABLE_HOOK, m);
+						System.out.println("[" + plugin.name() + "] Added " + m.getName() + " to disable hook.");
+					}
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * @return The plugin annotation of the plugin.
 	 */
 	public Plugin getPluginDetails() {
 		return this.plugin;
 	}
-	
+
 	/**
 	 * @return An instance of the plugin.
 	 */
 	public Object getInstance() {
 		return this.instance;
 	}
-	
+
 }

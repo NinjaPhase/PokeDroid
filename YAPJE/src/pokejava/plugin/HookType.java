@@ -9,5 +9,6 @@ package pokejava.plugin;
  *
  */
 public enum HookType {
-	ENABLE_HOOK
+	ENABLE_HOOK,
+	DISABLE_HOOK
 }
