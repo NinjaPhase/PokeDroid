@@ -8,6 +8,6 @@ package pokejava.api.events;
  * @version 1.0
  *
  */
-public interface EnableEvent {
-
+public interface EnableEvent extends Event {
+	
 }

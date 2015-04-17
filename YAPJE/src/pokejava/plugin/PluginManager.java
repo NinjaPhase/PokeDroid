@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import pokejava.api.Game;
 import pokejava.api.events.EnableEvent;
 import pokejava.api.plugin.Plugin;
 
@@ -30,13 +31,18 @@ public class PluginManager {
 	/**
 	 * Constructor for a new plugin manager.
 	 */
-	public PluginManager() {
-		plugins = new HashMap<String, PluginContainer>();
+	public PluginManager(final Game game) {
+		this.plugins = new HashMap<String, PluginContainer>();
 		loadPluginFolder(new File(PLUGIN_FOLDER));
 		for(PluginContainer p : plugins.values()) {
 			if(p.getHook(HookType.ENABLE_HOOK) != null) {
 				try {
-					p.getHook(HookType.ENABLE_HOOK).invoke(p.getInstance(), new EnableEvent(){});
+					p.getHook(HookType.ENABLE_HOOK).invoke(p.getInstance(), new EnableEvent(){
+
+						@Override
+						public Game getGame() {
+							return game;
+						}});
 				} catch (IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
 					// TODO Auto-generated catch block
@@ -122,10 +128,6 @@ public class PluginManager {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		new PluginManager();
 	}
 
 }

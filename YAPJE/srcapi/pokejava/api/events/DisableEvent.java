@@ -7,6 +7,6 @@ package pokejava.api.events;
  * @version 1.0
  *
  */
-public interface DisableEvent {
+public interface DisableEvent extends Event {
 
 }

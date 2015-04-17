@@ -1,2 +1,2 @@
 # YAPJEngine
-Yet Another PokÃ©mon Java Engine
+Yet Another Pokémon Java Engine

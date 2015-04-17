@@ -2,8 +2,12 @@ package pokejava;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashMap;
+import java.util.Map;
 
 import pokejava.api.Game;
+import pokejava.api.pokemon.ExperienceType;
+import pokejava.plugin.PluginManager;
 import pokejava.scene.Scene;
 import pokejava.scene.SceneMap;
 
@@ -31,6 +35,10 @@ public class PokeGame implements Game {
 
 	private Display display;
 	private Scene scene;
+	
+	private PluginManager pluginManager;
+	
+	private Map<String, ExperienceType> expPools;
 
 	private boolean isRunning;
 
@@ -38,12 +46,30 @@ public class PokeGame implements Game {
 	 * Constructor for the game object.
 	 */
 	public PokeGame() {
+		this.pluginManager = new PluginManager(this);
+		this.initSystems();
 		this.display = new Display(TITLE, WIDTH, HEIGHT);
 		this.scene = new SceneMap(this);
 		this.isRunning = true;
 		updateLoop();
 	}
 	
+	/**
+	 * Initialises the different pokemon types.
+	 */
+	private void initSystems() {
+		this.expPools = new HashMap<String, ExperienceType>();
+		this.expPools.put(ExperienceType.ERRATIC.getName(), ExperienceType.ERRATIC);
+		this.expPools.put(ExperienceType.FAST.getName(), ExperienceType.FAST);
+		this.expPools.put(ExperienceType.FLUCTUATING.getName(), ExperienceType.FLUCTUATING);
+		this.expPools.put(ExperienceType.MEDIUM_FAST.getName(), ExperienceType.MEDIUM_FAST);
+		this.expPools.put(ExperienceType.MEDIUM_SLOW.getName(), ExperienceType.MEDIUM_SLOW);
+		this.expPools.put(ExperienceType.SLOW.getName(), ExperienceType.SLOW);
+	}
+	
+	/**
+	 * The update loop of the game.
+	 */
 	private void updateLoop() {
 		double timeDelta = 1.0, timeElapsed = 0.0;
 		long lastUpdate = System.nanoTime();
@@ -84,6 +110,18 @@ public class PokeGame implements Game {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.setColor(Color.WHITE);
 		this.scene.onRender(g);
+	}
+	
+	/**
+	 * @return The plugin manager of this game
+	 */
+	public PluginManager getPluginManager() {
+		return this.pluginManager;
+	}
+	
+	@Override
+	public Map<String, ExperienceType> getExpTypes() {
+		return this.expPools;
 	}
 
 	/**
