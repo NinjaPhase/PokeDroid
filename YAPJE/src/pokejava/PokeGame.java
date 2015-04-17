@@ -3,6 +3,10 @@ package pokejava;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import pokejava.api.Game;
+import pokejava.scene.Scene;
+import pokejava.scene.SceneMap;
+
 /**
  * The game class will bind all the features of the game together
  * and will be the main access point for the game.
@@ -11,7 +15,7 @@ import java.awt.Graphics;
  * @version 1.0
  *
  */
-public class Game {
+public class PokeGame implements Game {
 	private static final String[] SPLASH_TITLES = new String[]{
 		"Random Experiences",
 		"Ambition at it's finest",
@@ -26,15 +30,21 @@ public class Game {
 	private static final long OPTIMAL_TIME = 1000000000/TARGET_FPS;
 
 	private Display display;
+	private Scene scene;
 
 	private boolean isRunning;
 
 	/**
 	 * Constructor for the game object.
 	 */
-	public Game() {
+	public PokeGame() {
 		this.display = new Display(TITLE, WIDTH, HEIGHT);
+		this.scene = new SceneMap(this);
 		this.isRunning = true;
+		updateLoop();
+	}
+	
+	private void updateLoop() {
 		double timeDelta = 1.0, timeElapsed = 0.0;
 		long lastUpdate = System.nanoTime();
 		while(isRunning) {
@@ -54,15 +64,26 @@ public class Game {
 		}
 	}
 
+	/**
+	 * The update method of the game.
+	 * 
+	 * @param timeDelta The delta time.
+	 * @param timeTotal The time elapsed since the start.
+	 */
 	private void onUpdate(double timeDelta, double timeTotal) {
-		
+		this.scene.onUpdate(timeDelta, timeTotal);
 	}
 
+	/**
+	 * The render method of the game.
+	 * 
+	 * @param g The graphics object.
+	 */
 	private void onRender(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.setColor(Color.WHITE);
-		g.fillRect(32, 32, 32, 32);
+		this.scene.onRender(g);
 	}
 
 	/**
@@ -71,7 +92,7 @@ public class Game {
 	 * @param args Arguments
 	 */
 	public static void main(String[] args) {
-		new Game();
+		new PokeGame();
 	}
 
 }
