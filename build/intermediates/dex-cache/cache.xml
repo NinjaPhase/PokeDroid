@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Joshua\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-backend-android\1.7.0\d8c0e81a68812893d0bf80cea37fbcba9f23d38b\gdx-backend-android-1.7.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d8c0e81a68812893d0bf80cea37fbcba9f23d38b">
+        <dex dex="C:\Users\Joshua\Desktop\PokeDroid\android\build\intermediates\pre-dexed\debug\gdx-backend-android-1.7.0-ec8bd7d1bcfe8b7360f228e5ac72f748e5a47b4d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Joshua\Desktop\PokeDroid\core\build\libs\core-1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="9eb7d7f7b1e4e398babe363847d3fa4929af570e">
+        <dex dex="C:\Users\Joshua\Desktop\PokeDroid\android\build\intermediates\pre-dexed\debug\core-1.0-51a3a2bc066ee76559a7b082bbb99bf9c5911b29.jar" />
+    </item>
+    <item
+        jar="C:\Users\Joshua\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx\1.7.0\1b08c96132448b5ab9c0cc8dea3e985dcf0166fd\gdx-1.7.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1b08c96132448b5ab9c0cc8dea3e985dcf0166fd">
+        <dex dex="C:\Users\Joshua\Desktop\PokeDroid\android\build\intermediates\pre-dexed\debug\gdx-1.7.0-6fa86ad2752f373c1d1980de10df68f437360aa4.jar" />
+    </item>
+
+</items>
