@@ -3,25 +3,40 @@ package com.pokedroid;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.pokedroid.scene.SceneManager;
+import com.pokedroid.scene.SceneSplash;
 
+/**
+ * <p>This is the core application, this is where the game logic will occur.</p>
+ * 
+ * @author PoketronHacker
+ * @version v1.0
+ * @since v1.0
+ *
+ */
 public class PokeDroid extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+	public static final int VIRTUAL_WIDTH = 768;
+	
+	private SceneManager sceneManager;
 	
 	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+	public void create() {
+		sceneManager = new SceneManager(this);
+		sceneManager.push(new SceneSplash());
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+	public void render() {
+		sceneManager.update(Gdx.graphics.getDeltaTime());
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		sceneManager.render();
 	}
+	
+	@Override
+	public void dispose() {
+		sceneManager.dispose();
+	}
+	
+	
 }
