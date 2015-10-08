@@ -33,7 +33,31 @@ public interface Scene extends Disposable {
 	 */
 	public void render();
 	
+	/**
+	 * <p>An event caused by resizing the window.</p>
+	 * 
+	 * @param width The width.
+	 * @param height The height.
+	 */
+	public void resize(int width, int height);
+	
 	@Override
 	public void dispose();
+	
+	/**
+	 * <p>An event caused by a key being pressed.</p>
+	 * 
+	 * @param keycode The keycode.
+	 * @return Whether the input was processed.
+	 */
+	public boolean keyDown(int keycode);
+	
+	/**
+	 * <p>An event caused by a key being released.</p>
+	 * 
+	 * @param keycode The keycode.
+	 * @return Whether the input was processed.
+	 */
+	public boolean keyUp(int keycode);
 	
 }
