@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.JsonReader;
 import com.pokedroid.PokeDroid;
@@ -31,6 +32,7 @@ public class SceneMap implements Scene {
 	private Camera camera;
 	private Player player;
 	private boolean up, down, left, right;
+	private Texture texture;
 
 	@Override
 	public void create(PokeDroid game) {
@@ -38,7 +40,8 @@ public class SceneMap implements Scene {
 		this.game.clearColor.set(Color.BLACK);
 		this.johto = new TileSet(new JsonReader().parse(Gdx.files.internal("maps/set_johto.json")));
 		this.firstMap = new TileMap(new JsonReader().parse(Gdx.files.internal("maps/map_firstMap.json")), this.johto);
-		this.player = new Player(firstMap);
+		this.texture = new Texture(Gdx.files.internal("graphics/entity/gold.png"));
+		this.player = new Player(firstMap, texture);
 		this.camera = game.createCamera();
 		this.camera.position.setZero();
 		this.camera.update();
@@ -59,10 +62,12 @@ public class SceneMap implements Scene {
 	@Override
 	public void render() {
 		batch.begin();
-		firstMap.render(batch, 0, 0f, 0f);
+		for(int i = 0; i < firstMap.getLayerCount()-1; i++)
+			firstMap.render(batch, i, 0f, 0f);
 		for(Entity e : firstMap.getEntityList()) {
 			e.render(batch);
 		}
+		firstMap.render(batch, firstMap.getLayerCount()-1, 0f, 0f);
 		batch.end();
 	}
 
@@ -77,6 +82,8 @@ public class SceneMap implements Scene {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		texture.dispose();
+		this.johto.dispose();
 	}
 
 	@Override

@@ -23,6 +23,7 @@ public class TileMap {
 	private int[][] tiles;
 	private TileSet tileset;
 	private List<Entity> entityList;
+	private int startX, startY;
 	
 	/**
 	 * <p>Creates a new {@code TileMap} from a JSON file.</p>
@@ -38,6 +39,8 @@ public class TileMap {
 		this.width = map.getInt("width");
 		this.height = map.getInt("height");
 		this.layerCount = map.getInt("layers");
+		this.startX = map.getInt("start_x", width/2);
+		this.startY = map.getInt("start_y", height/2);
 		if(map.get("tiles").size != layerCount)
 			throw new MapInitialisationException("Layer count mismatch");
 		for(int i = 0; i < layerCount; i++)
@@ -47,7 +50,8 @@ public class TileMap {
 		for(int l = 0; l < layerCount; l++) {
 			for(int y = 0; y < height; y++) {
 				for(int x = 0; x < width; x++) {
-					tiles[l][x + (y * width)] = map.get("tiles").get(l).getInt(x + (y * width));
+					int rel_y = (height-1)-y;
+					tiles[l][x + (rel_y * width)] = map.get("tiles").get(l).getInt(x + (y * width))+map.getInt("id_offset", 0);
 				}
 			}
 		}
@@ -66,11 +70,22 @@ public class TileMap {
 			for(int x = 0; x < width; x++) {
 				if(tiles[l][x + (y * width)] == -1)
 					continue;
-				float rel_y = (height-1)-y;
 				batch.draw(tileset.getTile(tiles[l][x + (y * width)]),
-						(x*tileset.getWidth())+offsetX, (rel_y*tileset.getHeight())+offsetY);
+						(x*tileset.getWidth())+offsetX, (y*tileset.getHeight())+offsetY);
 			}
 		}
+	}
+	
+	/**
+	 * <p>Gets the tile at an x and y.</p>
+	 * 
+	 * @param l The layer.
+	 * @param x The x position.
+	 * @param y The y position.
+	 * @return The tile at x and y.
+	 */
+	public int getTile(int l, int x, int y) {
+		return tiles[l][x + (y * width)];
 	}
 	
 	/**
@@ -89,6 +104,24 @@ public class TileMap {
 	 */
 	public int getHeight() {
 		return this.height;
+	}
+	
+	/**
+	 * <p>Gets the starting point for a player on this {@code TileMap}.</p>
+	 * 
+	 * @return The player starting point.
+	 */
+	public int getStartX() {
+		return this.startX;
+	}
+	
+	/**
+	 * <p>Gets the starting point for a player on this {@code TileMap}.</p>
+	 * 
+	 * @return The starting point for a player on this {@code TileMap}.
+	 */
+	public int getStartY() {
+		return this.startY;
 	}
 	
 	/**

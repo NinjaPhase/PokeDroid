@@ -1,10 +1,10 @@
 package com.pokedroid.android;
 
-import android.os.Bundle;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.pokedroid.PokeDroid;
+
+import android.os.Bundle;
 
 /**
  * <p>This is the android application wrapper, it is used to run the

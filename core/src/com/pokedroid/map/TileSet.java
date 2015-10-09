@@ -19,6 +19,7 @@ public class TileSet implements Disposable {
 	
 	private Texture[] textures;
 	private TextureRegion[] tiles;
+	private int[] tileData;
 	private int tileWidth, tileHeight;
 	
 	/**
@@ -30,6 +31,7 @@ public class TileSet implements Disposable {
 		this.tileWidth = set.getInt("width");
 		this.tileHeight = set.getInt("height");
 		JsonValue img = set.get("images");
+		JsonValue data = set.get("data");
 		textures = new Texture[img.size];
 		for(int i = 0; i < img.size; i++) {
 			textures[i] = new Texture(img.getString(i));
@@ -42,6 +44,7 @@ public class TileSet implements Disposable {
 			size += (cols*rows);
 		}
 		tiles = new TextureRegion[size];
+		tileData = new int[size];
 		int index = 0;
 		for(int i = 0; i < textures.length; i++) {
 			Texture t = textures[i];
@@ -49,6 +52,9 @@ public class TileSet implements Disposable {
 			int rows = t.getHeight()/tileHeight;
 			for(int y = 0; y < rows; y++) {
 				for(int x = 0; x < cols; x++) {
+					if(data.has(String.valueOf(index))) {
+						tileData[index] = data.getInt(String.valueOf(index));
+					}
 					tiles[index++] = new TextureRegion(t, x*tileWidth, y*tileHeight, tileWidth, tileHeight);
 				}
 			}
@@ -60,6 +66,16 @@ public class TileSet implements Disposable {
 		for(Texture t : textures)
 			t.dispose();
 		textures = null;
+	}
+	
+	/**
+	 * <p>Gets whether a tile with the index of i is solid.</p>
+	 * 
+	 * @param i The index of the tile.
+ 	 * @return Whether the tile is solid.
+	 */
+	public boolean isSolid(int i) {
+		return (this.tileData[i] & 0x1) > 0;
 	}
 	
 	/**
