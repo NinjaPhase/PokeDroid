@@ -23,8 +23,9 @@ public class DesktopLauncher {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = DESKTOP_TITLE;
+		float f = LwjglApplicationConfiguration.getDesktopDisplayMode().width / PokeDroid.VIRTUAL_WIDTH;
 		config.width = PokeDroid.VIRTUAL_WIDTH;
-		config.height = (int)(PokeDroid.VIRTUAL_WIDTH*ASPECT_WIDESCREEN);
+		config.height = (int)(PokeDroid.VIRTUAL_WIDTH * ASPECT_WIDESCREEN);
 		new LwjglApplication(new PokeDroid(), config);
 	}
 }

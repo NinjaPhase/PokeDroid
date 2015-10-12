@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.JsonReader;
 import com.pokedroid.PokeDroid;
 import com.pokedroid.entity.Entity;
 import com.pokedroid.entity.EntityDirection;
 import com.pokedroid.entity.Player;
 import com.pokedroid.map.TileMap;
-import com.pokedroid.map.TileSet;
+import com.pokedroid.registry.TileMapRegistry;
 
 /**
  * <p>This is the map scene, where the {@link TileMap}'s will be rendered and all
@@ -26,7 +25,6 @@ import com.pokedroid.map.TileSet;
 public class SceneMap implements Scene {
 
 	private PokeDroid game;
-	private TileSet johto;
 	private TileMap firstMap;
 	private SpriteBatch batch;
 	private Camera camera;
@@ -38,8 +36,7 @@ public class SceneMap implements Scene {
 	public void create(PokeDroid game) {
 		this.game = game;
 		this.game.clearColor.set(Color.BLACK);
-		this.johto = new TileSet(new JsonReader().parse(Gdx.files.internal("maps/set_johto.json")));
-		this.firstMap = new TileMap(new JsonReader().parse(Gdx.files.internal("maps/map_firstMap.json")), this.johto);
+		this.firstMap = TileMapRegistry.getMap("Start Map");
 		this.texture = new Texture(Gdx.files.internal("graphics/entity/gold.png"));
 		this.player = new Player(firstMap, texture);
 		this.camera = game.createCamera();
@@ -83,7 +80,6 @@ public class SceneMap implements Scene {
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
-		this.johto.dispose();
 	}
 
 	@Override

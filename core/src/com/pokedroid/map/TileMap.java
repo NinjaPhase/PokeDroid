@@ -77,6 +77,26 @@ public class TileMap {
 	}
 	
 	/**
+	 * <p>Checks whether the tile at x, y is solid or not, this
+	 * tests all layers.</p>
+	 * 
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @return Whether the player can move there.
+	 */
+	public boolean canMove(int x, int y) {
+		if(x < 0 || x >= width
+				|| y < 0 || y >= height)
+			return false;
+		for(int l = 0; l < layerCount; l++) {
+			if(tiles[l][x + (y * width)] == -1) continue;
+			if(tileset.isSolid(tiles[l][x + (y * width)]))
+				return false;
+		}
+		return true;
+	}
+	
+	/**
 	 * <p>Gets the tile at an x and y.</p>
 	 * 
 	 * @param l The layer.

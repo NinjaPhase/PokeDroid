@@ -1,5 +1,6 @@
 {
   "name": "Start Map",
+  "tileset": "Johto",
   "width": 60,
   "height": 30,
   "layers": 2,

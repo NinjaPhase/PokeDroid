@@ -161,10 +161,7 @@ public class Player extends Entity {
 	 * @return Whether the player can move.
 	 */
 	private boolean canMove(int x, int y) {
-		if(x < 0 || x >= map.getWidth()
-				|| y < 0 || y >= map.getHeight())
-			return false;
-		return !map.getTileset().isSolid(map.getTile(0, x, y));
+		return map.canMove(x, y);
 	}
 
 	/**

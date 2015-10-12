@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pokedroid.input.OnscreenControls;
+import com.pokedroid.registry.TilesetRegistry;
 import com.pokedroid.scene.Scene;
 import com.pokedroid.scene.SceneManager;
 import com.pokedroid.scene.SceneSplash;
@@ -21,7 +22,7 @@ import com.pokedroid.scene.SceneSplash;
  *
  */
 public class PokeDroid extends ApplicationAdapter implements InputProcessor {
-	public static final int VIRTUAL_WIDTH = 768;
+	public static final int VIRTUAL_WIDTH = 640;
 	
 	public final Color clearColor = new Color(0f, 0f, 0f, 1f);
 	
@@ -49,6 +50,7 @@ public class PokeDroid extends ApplicationAdapter implements InputProcessor {
 	
 	@Override
 	public void resize(int width, int height) {
+		controls.resize(width, height);
 		Scene s = sceneManager.getCurrentScene();
 		if(s != null) s.resize(width, height);
 	}
@@ -56,6 +58,7 @@ public class PokeDroid extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public void dispose() {
 		sceneManager.dispose();
+		TilesetRegistry.dispose();
 	}
 	
 	/**
