@@ -1,157 +1,200 @@
 package org.pokedroid.editor.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import org.pokedroid.editor.asset.AssetFolder;
-import org.pokedroid.editor.gui.brush.Brush;
-import org.pokedroid.editor.gui.main.EditorToolbar;
-import org.pokedroid.editor.gui.main.MapEditor;
-import org.pokedroid.editor.gui.main.MapTree;
-import org.pokedroid.editor.gui.main.TileSelection;
-import org.pokedroid.editor.gui.main.TileSelector;
+import org.pokedroid.editor.Config;
+import org.pokedroid.editor.asset.GameFolder;
+import org.pokedroid.editor.gui.brush.BrushPencil;
+import org.pokedroid.editor.gui.brush.BrushRegistry;
+import org.pokedroid.editor.gui.brush.TileSelection;
 import org.pokedroid.editor.map.TileMap;
 
+import com.alee.extended.filechooser.WebDirectoryChooser;
+import com.alee.laf.WebLookAndFeel;
+import com.alee.laf.scroll.WebScrollPane;
+import com.alee.laf.splitpane.WebSplitPane;
+
 /**
- * <p>This will contain the main frame we are working from.</p>
+ * <p>
+ * This will contain the main frame we are working from.
+ * </p>
  * 
  * @author PoketronHacker
  * @version 10 October 2015
  * 
  */
-public class MainGUI extends JFrame implements KeyListener {
+public class MainGUI extends JFrame {
 	private static final long serialVersionUID = -2719719472469080364L;
-	
-	private AssetFolder folder;
-	private JSplitPane splTileList, splTileMap;
-	private TileSelector tileSelector;
-	private MapEditor mapEditor;
-	
+
+	private GameFolder gameFolder;
+	private WebDirectoryChooser chooseGameFolder;
+	private Properties props;
+	private TileMap map;
+	private MapDisplay mapDisplay;
+	private TileDisplay tileDisplay;
+	private TileSelection tileSelection;
+
 	/**
-	 * <p>Constructor for a new {@code MainFrame}.</p>
+	 * <p>
+	 * Constructor for a new {@code MainFrame}.
+	 * </p>
 	 */
 	public MainGUI() {
 		super();
-		this.folder = new AssetFolder(new File("../android/assets/"));
-		this.mapEditor = new MapEditor(this);
-		this.tileSelector = new TileSelector(this);
-		this.splTileList = new JSplitPane(JSplitPane.VERTICAL_SPLIT, createScrollPane(tileSelector), new MapTree(this));
-		this.splTileMap = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splTileList, createScrollPane(mapEditor));
-		this.getContentPane().setLayout(new BorderLayout());
-		this.getContentPane().add(splTileMap);
-		this.getContentPane().add(BorderLayout.NORTH, new EditorToolbar(this));
-		setTitle("PokeDroid - The Editor");
-		setSize((int)(Toolkit.getDefaultToolkit().getScreenSize().width*0.75),
-				(int)(Toolkit.getDefaultToolkit().getScreenSize().height*0.75));
-		setLocationRelativeTo(null);
-		setVisible(true);
-		this.splTileList.setDividerLocation(0.5);
-		this.getContentPane().addKeyListener(this);
-		this.addKeyListener(this);
-		this.setFocusable(true);
-		this.setFocusTraversalKeysEnabled(false);
+		this.map = null;
+		this.tileSelection = new TileSelection();
+		this.tileSelection.w = 1;
+		this.tileSelection.h = 1;
+		this.tileSelection.tiles = new int[] { 2 };
+		this.chooseGameFolder = new WebDirectoryChooser(this);
+		this.loadProperties();
+		this.addComponents();
+		this.setupFrame();
 	}
-	
-	private JScrollPane createScrollPane(Component view) {
-		JScrollPane newPane = new JScrollPane(view);
-		return newPane;
-	}
-	
+
 	/**
-	 * <p>Sets the brush to a new brush.</p>
-	 * 
-	 * @param brush The new brush.
+	 * <p>
+	 * Loads the properties and initialises the asset folder.
+	 * </p>
 	 */
-	public void setBrush(Brush brush) {
-		this.mapEditor.setBrush(brush);
-	}
-	
-	/**
-	 * <p>Gets the current asset folder.</p>
-	 * 
-	 * @return The current asset folder.
-	 */
-	public AssetFolder getAssetFolder() {
-		return this.folder;
-	}
-	
-	/**
-	 * <p>Sets the current {@code TileMap} that is being worked on.</p>
-	 * 
-	 * @param map The {@code TileMap} being worked on.
-	 */
-	public void setMap(TileMap map) {
-		this.mapEditor.setCurrentMap(map);
-	}
-	
-	/**
-	 * <p>Sets the currently edited layer.</p>
-	 * 
-	 * @param layerId The new layer id.
-	 */
-	public void setLayer(int layerId) {
-		if(layerId > getMap().getLayerCount())
-			layerId = getMap().getLayerCount()-1;
-		this.mapEditor.setCurrentLayer(layerId);
-	}
-	
-	/**
-	 * <p>Gets the tile map.</p>
-	 * 
-	 * @return The tile map.
-	 */
-	public TileMap getMap() {
-		return this.mapEditor.getMap();
-	}
-	
-	/**
-	 * <p>Gets the {@code TileSelection}.</p>
-	 * 
-	 * @return The {@code TileSelection}
-	 */
-	public TileSelection getSelection() {
-		return this.mapEditor.getSelection();
-	}
-	
-	public static void main(String[] args) {
+	private void loadProperties() {
+		this.props = new Properties();
 		try {
-			UIManager.setLookAndFeel(UIManager.getInstalledLookAndFeels()[1].getClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
+			this.props.load(new FileReader(Config.CONFIG_FILE));
+		} catch (IOException e) {
+			System.err.println("[MainGUI] Unable to read config file.");
 			e.printStackTrace();
 		}
-		new MainGUI();
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if((e.getModifiers() & KeyEvent.CTRL_MASK) > 0) {
-			if(e.getKeyCode() == KeyEvent.VK_Z) {
-				this.mapEditor.undo();
-			} else if(e.getKeyCode() == KeyEvent.VK_Y) {
-				this.mapEditor.redo();
+		if (!this.props.containsKey("GameDirectory")) {
+			this.chooseGameFolder.setTitle("Select PokeDroid Game Folder");
+			this.chooseGameFolder.setSelectedDirectory(new File("./"));
+			if (this.chooseGameFolder.showDialog() == JFileChooser.APPROVE_OPTION) {
+				this.props.setProperty("GameDirectory", this.chooseGameFolder.getSelectedDirectory().getPath());
 			}
 		}
+		this.gameFolder = new GameFolder(new File(props.getProperty("GameDirectory")));
+		this.map = gameFolder.getMaps().get(0);
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		
+	/**
+	 * <p>
+	 * Adds the components to the {@code MainGUI}
+	 * </p>
+	 */
+	private void addComponents() {
+		this.mapDisplay = new MapDisplay(this);
+		this.getContentPane().setLayout(new BorderLayout());
+		this.getContentPane().add(new EditorToolbar(this), BorderLayout.NORTH);
+		WebScrollPane mapPane = new WebScrollPane(mapDisplay);
+		mapPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		mapPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		WebSplitPane splPane = new WebSplitPane(WebSplitPane.HORIZONTAL_SPLIT, true,
+				new JScrollPane(tileDisplay = new TileDisplay(this), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+						JScrollPane.HORIZONTAL_SCROLLBAR_NEVER),
+				mapPane);
+		tileDisplay.repaint();
+		splPane.setDividerLocation(
+				(getTileMap().getTileset().getWidth() * 8) + mapPane.getVerticalScrollBar().getWidth());
+		this.getContentPane().add(splPane, BorderLayout.CENTER);
+		this.setJMenuBar(new EditorMenubar(this));
+	}
+
+	/**
+	 * <p>
+	 * Sets up the game frame.
+	 * </p>
+	 */
+	private void setupFrame() {
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("Mappy - The PokeDroid Editor");
+		setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.75),
+				(int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.75));
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	/**
+	 * <p>
+	 * Gets the currently working on game folder.
+	 * </p>
+	 * 
+	 * @return The currently being worked on game folder.
+	 */
+	public GameFolder getGameFolder() {
+		return this.gameFolder;
+	}
+
+	/**
+	 * <p>
+	 * Sets the current tilemap being worked on.
+	 * </p>
+	 * 
+	 * @param t
+	 *            The tilemap to work on.
+	 */
+	public void setTileMap(TileMap t) {
+		this.map = t;
+		this.tileSelection.w = 0;
+		this.tileSelection.h = 0;
+		this.tileSelection.tiles = null;
+		repaint();
+	}
+
+	/**
+	 * <p>
+	 * Gets the current tilemap that is being worked on, this can be
+	 * {@code null} if there is no map being worked on.
+	 * </p>
+	 * 
+	 * @return The current {@code TileMap} being worked on.
+	 */
+	public TileMap getTileMap() {
+		return this.map;
+	}
+
+	/**
+	 * <p>
+	 * Gets the display we will display the map onto.
+	 * </p>
+	 * 
+	 * @return The display we will display the map onto.
+	 */
+	public MapDisplay getMapDisplay() {
+		return this.mapDisplay;
+	}
+
+	/**
+	 * <p>
+	 * Gets the current tileselection.
+	 * </p>
+	 * 
+	 * @return The current tileselection.
+	 */
+	public TileSelection getTileSelection() {
+		return this.tileSelection;
+	}
+
+	/**
+	 * <p>
+	 * Static main method.
+	 * </p>
+	 * 
+	 * @param args
+	 *            The program arguments.
+	 */
+	public static void main(String[] args) {
+		WebLookAndFeel.install();
+		BrushRegistry.BRUSHES.add(new BrushPencil());
+		new MainGUI();
 	}
 
 }

@@ -15,7 +15,9 @@ import org.json.JSONObject;
 import org.pokedroid.editor.util.ImageUtils;
 
 /**
- * <p>A {@code Tileset} is a collection of tiles.</p>
+ * <p>
+ * A {@code Tileset} is a collection of tiles.
+ * </p>
  * 
  * @author PoketronHacker
  * @version v1.0
@@ -30,10 +32,14 @@ public class Tileset {
 	private Image[] tiles;
 
 	/**
-	 * <p>Constructs an empty {@code Tileset}.</p>
+	 * <p>
+	 * Constructs an empty {@code Tileset}.
+	 * </p>
 	 * 
-	 * @param width The width of each tile.
-	 * @param height The height of each tile.
+	 * @param width
+	 *            The width of each tile.
+	 * @param height
+	 *            The height of each tile.
 	 */
 	public Tileset(String name, int width, int height) {
 		this.images = Collections.synchronizedList(new ArrayList<File>());
@@ -44,14 +50,18 @@ public class Tileset {
 	}
 
 	/**
-	 * <p>Loads a {@code Tileset} from a {@code JSONObject}.</p>
+	 * <p>
+	 * Loads a {@code Tileset} from a {@code JSONObject}.
+	 * </p>
 	 * 
-	 * @param o The object to load.
-	 * @param assetFolder The asset folder location.
+	 * @param o
+	 *            The object to load.
+	 * @param assetFolder
+	 *            The asset folder location.
 	 */
 	public Tileset(JSONObject o, File assetFolder) {
 		this(o.getString("name"), o.getInt("width"), o.getInt("height"));
-		for(int i = 0; i < o.getJSONArray("images").length(); i++) {
+		for (int i = 0; i < o.getJSONArray("images").length(); i++) {
 			try {
 				addImage(new File(assetFolder, o.getJSONArray("images").getString(i)));
 			} catch (JSONException | IOException e) {
@@ -61,59 +71,75 @@ public class Tileset {
 	}
 
 	/**
-	 * <p>Adds an image to the tileset.</p>
+	 * <p>
+	 * Adds an image to the tileset.
+	 * </p>
 	 * 
-	 * @param imageFile The image to add.
-	 * @throws IOException Thrown if an IO error occurs
+	 * @param imageFile
+	 *            The image to add.
+	 * @throws IOException
+	 *             Thrown if an IO error occurs
 	 */
 	public void addImage(File imagefile) throws IOException {
 		Image img = ImageIO.read(imagefile);
 		BufferedImage[] t = ImageUtils.splitImage(img, this.width, this.height);
-		if(tiles != null) {
+		if (tiles != null) {
 			int startIndex = tiles.length;
-			this.tiles = Arrays.copyOf(this.tiles, this.tiles.length+t.length);
-			for(int i = startIndex; i < tiles.length; i++)
-				tiles[i] = t[i-startIndex];
+			this.tiles = Arrays.copyOf(this.tiles, this.tiles.length + t.length);
+			for (int i = startIndex; i < tiles.length; i++)
+				tiles[i] = t[i - startIndex];
 		} else {
 			tiles = new Image[t.length];
-			for(int i = 0; i < tiles.length; i++)
+			for (int i = 0; i < tiles.length; i++)
 				tiles[i] = t[i];
 		}
 		this.images.add(imagefile);
 	}
 
 	/**
-	 * <p>Removes an image from the tileset</p>
+	 * <p>
+	 * Removes an image from the tileset
+	 * </p>
 	 * 
-	 * @param imageFile The image to remove.
-	 * @throws IOException Thrown if an IO error occurs
+	 * @param imageFile
+	 *            The image to remove.
+	 * @throws IOException
+	 *             Thrown if an IO error occurs
 	 */
 	public void removeImage(File imageFile) throws IOException {
 		reloadImages();
 	}
 
 	/**
-	 * <p>Reloads the files and resets the tile array.</p>
+	 * <p>
+	 * Reloads the files and resets the tile array.
+	 * </p>
 	 * 
-	 * @throws IOException Thrown if an IO error occurs
+	 * @throws IOException
+	 *             Thrown if an IO error occurs
 	 */
 	public void reloadImages() throws IOException {
 
 	}
 
 	/**
-	 * <p>Gets the amount of tiles within the tileset.</p>
+	 * <p>
+	 * Gets the amount of tiles within the tileset.
+	 * </p>
 	 * 
 	 * @return The amount of tiles within the tileset.
 	 */
 	public int length() {
 		return (tiles == null ? 0 : tiles.length);
 	}
-	
+
 	/**
-	 * <p>Gets a tile image.</p>
+	 * <p>
+	 * Gets a tile image.
+	 * </p>
 	 * 
-	 * @param i The tile id.
+	 * @param i
+	 *            The tile id.
 	 * @return The tile image.
 	 */
 	public Image getTile(int i) {
@@ -121,7 +147,9 @@ public class Tileset {
 	}
 
 	/**
-	 * <p>Gets the width of a single tile.</p>
+	 * <p>
+	 * Gets the width of a single tile.
+	 * </p>
 	 * 
 	 * @return The width of a single tile.
 	 */
@@ -130,14 +158,16 @@ public class Tileset {
 	}
 
 	/**
-	 * <p>Gets the height of a single tile.</p>
+	 * <p>
+	 * Gets the height of a single tile.
+	 * </p>
 	 * 
 	 * @return The height of a single tile.
 	 */
 	public int getHeight() {
 		return this.height;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.name;
