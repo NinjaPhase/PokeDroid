@@ -18,9 +18,19 @@ document.getElementById(id+'Link').style.display = 'none';
 <body>
 <h1>Lint Report</h1>
 <div class="titleSeparator"></div>
-Check performed at Mon Oct 05 17:17:36 BST 2015.<br/>
-0 errors and 1 warnings found:<br/><br/>
+Check performed at Wed Oct 28 21:13:29 GMT 2015.<br/>
+0 errors and 3 warnings found:<br/><br/>
 <table class="overview">
+<tr><td></td><td class="categoryColumn"><a href="#Correctness">Correctness</a>
+</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><img border="0" align="top" src="lint-results_files/lint-warning.png" alt="Warning" />
+<a href="#OldTargetApi">OldTargetApi: Target SDK attribute is not targeting latest version</a>
+</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><img border="0" align="top" src="lint-results_files/lint-warning.png" alt="Warning" />
+<a href="#UnusedAttribute">UnusedAttribute: Attribute unused on older versions</a>
+</td></tr>
 <tr><td></td><td class="categoryColumn"><a href="#Usability:Icons">Usability:Icons</a>
 </td></tr>
 <tr>
@@ -30,6 +40,65 @@ Check performed at Mon Oct 05 17:17:36 BST 2015.<br/>
 <tr><td></td><td class="categoryColumn"><a href="#MissingIssues">Disabled Checks (11)</a>
 </td></tr></table>
 <br/>
+<a name="Correctness"></a>
+<div class="category"><a href="#" title="Return to top">Correctness</a><div class="categorySeparator"></div>
+</div>
+<a name="OldTargetApi"></a>
+<div class="issue">
+<div class="id"><a href="#" title="Return to top">OldTargetApi: Target SDK attribute is not targeting latest version</a><div class="issueSeparator"></div>
+</div>
+<div class="warningslist">
+<span class="location"><a href="../../AndroidManifest.xml">../../AndroidManifest.xml</a>:7</span>: <span class="message">Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the <code>android.os.Build.VERSION_CODES</code> javadoc for details.</span><br /><pre class="errorlines">
+<span class="lineno">   4</span>     android:versionCode="1"
+<span class="lineno">   5</span>     android:versionName="1.0" >
+<span class="lineno">   6</span> 
+<span class="lineno">   7</span>     &lt;uses-sdk android:minSdkVersion="8" <span class="errorspan">android:targetSdkVersion="22" /></span>
+<span class="lineno">   8</span>     &lt;uses-permission android:name="android.permission.WAKE_LOCK"/>
+<span class="lineno">   9</span> 
+</pre>
+</div>
+<div class="metadata">Note: This issue has an associated quickfix operation in Android Studio/IntelliJ&nbsp;<img alt="Fix" border="0" align="top" src="lint-results_files/lint-run.png" />
+<br>
+Priority: 6 / 10<br/>
+Category: Correctness</div>
+Severity: <span class="warning">Warning</span><div class="summary">
+Explanation: Target SDK attribute is not targeting latest version.</div>
+<div class="explanation">
+When your application runs on a version of Android that is more recent than your <code>targetSdkVersion</code> specifies that it has been tested with, various compatibility modes kick in. This ensures that your application continues to work, but it may look out of place. For example, if the <code>targetSdkVersion</code> is less than 14, your app may get an option button in the UI.<br/>
+<br/>
+To fix this issue, set the <code>targetSdkVersion</code> to the highest available value. Then test your app to make sure everything works correctly. You may want to consult the compatibility notes to see what changes apply to each version you are adding support for: <a href="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html">http://developer.android.com/reference/android/os/Build.VERSION_CODES.html</a>
+</div>
+<br/><div class="moreinfo">More info: <a href="http://developer.android.com/reference/android/os/Build.VERSION_CODES.html">http://developer.android.com/reference/android/os/Build.VERSION_CODES.html</a>
+</div><br/>To suppress this error, use the issue id "OldTargetApi" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+</div>
+<a name="UnusedAttribute"></a>
+<div class="issue">
+<div class="id"><a href="#" title="Return to top">UnusedAttribute: Attribute unused on older versions</a><div class="issueSeparator"></div>
+</div>
+<div class="warningslist">
+<span class="location"><a href="../../AndroidManifest.xml">../../AndroidManifest.xml</a>:14</span>: <span class="message">Attribute <code>isGame</code> is only used in API level 21 and higher (current min is 8)</span><br /><pre class="errorlines">
+<span class="lineno">  11</span>         android:allowBackup="true"
+<span class="lineno">  12</span>         android:icon="@drawable/ic_launcher"
+<span class="lineno">  13</span>         android:label="@string/app_name"
+<span class="lineno">  14</span>         android:theme="@style/GdxTheme" <span class="errorspan">android:isGame="true"></span>
+<span class="lineno">  15</span>         &lt;activity
+<span class="lineno">  16</span>             android:name="com.pokedroid.android.AndroidLauncher"
+</pre>
+</div>
+<div class="metadata">Priority: 6 / 10<br/>
+Category: Correctness</div>
+Severity: <span class="warning">Warning</span><div class="summary">
+Explanation: Attribute unused on older versions.</div>
+<div class="explanation">
+This check finds attributes set in XML files that were introduced in a version newer than the oldest version targeted by your application (with the <code>minSdkVersion</code> attribute).<br/>
+<br/>
+This is not an error; the application will simply ignore the attribute. However, if the attribute is important to the appearance of functionality of your application, you should consider finding an alternative way to achieve the same result with only available attributes, and then you can optionally create a copy of the layout in a layout-vNN folder which will be used on API NN or higher where you can take advantage of the newer attribute.<br/>
+<br/>
+Note: This check does not only apply to attributes. For example, some tags can be unused too, such as the new <code>&lt;tag></code> element in layouts introduced in API 21.
+</div>
+<br/><div class="moreinfo">More info: </div><br/>To suppress this error, use the issue id "UnusedAttribute" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+</div>
+
 <a name="Usability:Icons"></a>
 <div class="category"><a href="#" title="Return to top">Usability:Icons</a><div class="categorySeparator"></div>
 </div>

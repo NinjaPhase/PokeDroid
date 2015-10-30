@@ -1,17 +1,15 @@
 package com.pokedroid.scene;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pokedroid.PokeDroid;
 import com.pokedroid.entity.Entity;
 import com.pokedroid.entity.EntityDirection;
 import com.pokedroid.entity.Player;
 import com.pokedroid.map.TileMap;
-import com.pokedroid.registry.TileMapRegistry;
+import com.pokedroid.story.Story;
 
 /**
  * <p>This is the map scene, where the {@link TileMap}'s will be rendered and all
@@ -25,33 +23,41 @@ import com.pokedroid.registry.TileMapRegistry;
 public class SceneMap implements Scene {
 
 	private PokeDroid game;
-	private TileMap firstMap;
 	private SpriteBatch batch;
 	private Camera camera;
 	private Player player;
 	private boolean up, down, left, right;
-	private Texture texture;
+	private Story story;
 
 	@Override
 	public void create(PokeDroid game) {
 		this.game = game;
+		this.story = game.getLoadedStory();
 		this.game.clearColor.set(Color.BLACK);
-		this.firstMap = TileMapRegistry.getMap("Start Map");
-		this.texture = new Texture(Gdx.files.internal("graphics/entity/gold.png"));
-		this.player = new Player(firstMap, texture);
+		this.player = new Player(game.getLoadedStory().getPlayerTexture(), game.getLoadedStory().getStartMap(),
+				game.getLoadedStory().getStartX(), game.getLoadedStory().getStartY());
 		this.camera = game.createCamera();
 		this.camera.position.setZero();
 		this.camera.update();
 		this.batch = new SpriteBatch();
 		this.batch.setProjectionMatrix(camera.combined);
+		this.player.getMap().onEnter();
 	}
 
 	@Override
 	public void update(float timeDelta) {
-		for(Entity e : firstMap.getEntityList()) {
+		if(this.story != game.getLoadedStory()) {
+			this.player.setSprite(game.getLoadedStory().getPlayerTexture());
+			this.player.setMap(game.getLoadedStory().getStartMap(),
+					game.getLoadedStory().getStartX(),
+					game.getLoadedStory().getStartY());
+			this.story = game.getLoadedStory();
+		}
+		for(Entity e : player.getMap().getEntityList()) {
 			e.update(timeDelta);
 		}
-		camera.position.set(player.getPosition(), 0f);
+		player.applyMapChange();
+		camera.position.set(player.getX(), player.getY(), 0f);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 	}
@@ -59,12 +65,15 @@ public class SceneMap implements Scene {
 	@Override
 	public void render() {
 		batch.begin();
-		for(int i = 0; i < firstMap.getLayerCount()-1; i++)
-			firstMap.render(batch, i, 0f, 0f);
-		for(Entity e : firstMap.getEntityList()) {
+		for(int i = 0; i < player.getMap().getLayerCount()-1; i++) {
+			player.getMap().render(batch, i, 0f, 0f);
+			player.getMap().renderConnections(batch, i, 0f, 0f);
+		}
+		for(Entity e : player.getMap().getEntityList()) {
 			e.render(batch);
 		}
-		firstMap.render(batch, firstMap.getLayerCount()-1, 0f, 0f);
+		player.getMap().render(batch, player.getMap().getLayerCount()-1, 0f, 0f);
+		player.getMap().renderConnections(batch, player.getMap().getLayerCount()-1, 0f, 0f);
 		batch.end();
 	}
 
@@ -79,7 +88,6 @@ public class SceneMap implements Scene {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
 	}
 
 	@Override
@@ -97,6 +105,12 @@ public class SceneMap implements Scene {
 		} else if(keycode == Keys.RIGHT) {
 			right = true;
 			player.move(EntityDirection.DIRECTION_RIGHT);
+		} else if(keycode == Keys.ENTER) {
+			int index = game.getStoryIndex();
+			index++;
+			if(index >= game.getStoryList().size())
+				index = 0;
+			game.setStory(index);
 		}
 		return false;
 	}

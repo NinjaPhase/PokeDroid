@@ -26,6 +26,7 @@ import org.pokedroid.editor.map.Tileset;
  */
 public class GameFolder {
 
+	@SuppressWarnings("unused")
 	private File dir, assetDir, mapFolder;
 	private List<TileMap> maps;
 	private Map<String, Tileset> tilesets;

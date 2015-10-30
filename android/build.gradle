@@ -1,6 +1,6 @@
 android {
     buildToolsVersion "23.0.1"
-    compileSdkVersion 22
+    compileSdkVersion 23
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -52,11 +52,12 @@ task run(type: Exec) {
         if (sdkDir) {
             path = sdkDir
         } else {
-            path = "$System.env.ANDROID_HOME"
+            path = System.getenv("ANDROID_HOME")
         }
     } else {
         path = "$System.env.ANDROID_HOME"
     }
+    println path
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.pokedroid.android/com.pokedroid.android.AndroidLauncher'
