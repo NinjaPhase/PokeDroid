@@ -66,7 +66,7 @@ public class Story implements Disposable {
 			}
 		} else if(file.extension().toLowerCase() == "zip") {
 			loadStoryFromZip(file);
-		} else throw new StoryLoadException("Story is incompatable type " + file.extension());
+		} else throw new StoryLoadException("Story is incompatible type " + file.extension());
 	}
 
 	/**

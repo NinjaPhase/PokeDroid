@@ -115,8 +115,8 @@ public class PokeDroid implements ApplicationListener {
 	 * 
 	 * @param args The program arguments.
 	 */
-	public static void main(String[] args) {
-		new LwjglApplication(new PokeDroid(), "PokeDroid - A Pokémon Simulator", 640, 360);
+	public static void main(String... args) {
+		new LwjglApplication(new PokeDroid(), "PokeDroid - A Pok?mon Simulator", 640, 360);
 	}
 
 }
