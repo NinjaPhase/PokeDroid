@@ -1,0 +1,11 @@
+{
+  "name": "Pokemon GBA",
+  "author": "Jesus",
+  "flavours": ["FireRed", "LeafGreen"],
+  "character": ["red.png", "blue.png"],
+  "start_point": ["mapA", 4, 4],
+  "configs": {
+    "inventory_type": ["block"],
+    "disable_items": ["$potions", "Super Potion"]
+  }
+}

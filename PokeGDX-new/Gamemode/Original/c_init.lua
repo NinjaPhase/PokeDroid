@@ -1,0 +1,1 @@
+require "c_init.lua"

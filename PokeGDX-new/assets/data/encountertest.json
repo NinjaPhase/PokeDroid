@@ -1,0 +1,11 @@
+{
+  "encounter": [
+    ["oddish", 2, 0.10],
+    ["zigzagoon", 2, 0.20],
+    ["wingull", 3, 0.08],
+    ["electrike", 3, 0.30],
+    ["plusle", 4, 0.15],
+    ["minun", 4, 0.02],
+    ["gulpin", 4, 0.15]
+  ]
+}

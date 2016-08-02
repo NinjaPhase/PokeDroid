@@ -1,0 +1,104 @@
+{
+  "normal": {
+  	"name": "Normal",
+  	"strongAgainst": [],
+  	"weakAgainst": ["rock", "steel"],
+  	"immuneAgainst": ["ghost"]
+  },
+  "fighting": {
+  	"name": "Fighting",
+  	"strongAgainst": ["normal","ice","dark","rock","steel"],
+  	"weakAgainst": ["poison","flying","bug","psychic"],
+  	"immuneAgainst": ["ghost"]
+  },
+  "flying": {
+  	"name": "Flying",
+  	"strongAgainst": ["bug","fighting","grass"],
+  	"weakAgainst": ["electric","rock","steel"],
+  	"immuneAgainst": []
+  },
+  "poison": {
+  	"name": "Poison",
+  	"strongAgainst": ["grass"],
+  	"weakAgainst": ["poison","ground","rock","ghost"],
+  	"immuneAgainst": ["steel"]
+  },
+  "ground": {
+  	"name": "Ground",
+  	"strongAgainst": ["electric","fire","poison","rock","steel"],
+  	"weakAgainst": ["bug","grass"],
+  	"immuneAgainst": ["flying"]
+  },
+  "rock": {
+  	"name": "Rock",
+  	"strongAgainst": ["bug","fire","flying","ice"],
+  	"weakAgainst": ["fighting","ground","steel"],
+  	"immuneAgainst": []
+  },
+  "bug": {
+  	"name": "Bug",
+  	"strongAgainst": ["dark","grass","psychic"],
+  	"weakAgainst": ["fighting","fire","flying","ghost","poison","steel"],
+  	"immuneAgainst": []
+  },
+  "ghost": {
+  	"name": "Ghost",
+  	"strongAgainst": ["ghost", "psychic"],
+  	"weakAgainst": ["dark","steel"],
+  	"immuneAgainst": ["normal"]
+  }
+  "steel": {
+  	"name": "Steel",
+  	"strongAgainst": ["ice","rock"],
+  	"weakAgainst": ["electric","fire","steel","water"],
+  	"immuneAgainst": []
+  },
+  "fire": {
+  	"name": "Fire",
+  	"strongAgainst": ["bug","grass","ice","steel"],
+  	"weakAgainst": ["dragon","fire","rock","water"],
+  	"immuneAgainst": []
+  },
+  "water": {
+  	"name": "Water",
+  	"strongAgainst": ["fire","ground","rock"],
+  	"weakAgainst": ["dragon","grass","water"],
+  	"immuneAgainst": []
+  },
+  "grass": {
+  	"name": "Grass",
+  	"strongAgainst": ["ground","rock","water"],
+  	"weakAgainst": ["bug","dragon","fire","flying","grass","poison","steel"],
+  	"immuneAgainst": []
+  },
+  "electric": {
+  	"name": "Electric",
+  	"strongAgainst": ["flying","water"],
+  	"weakAgainst": ["dragon","electric","grass"],
+  	"immuneAgainst": ["ground"]
+  },
+  "psychic": {
+  	"name": "Psychic",
+  	"strongAgainst": ["fighting","poison"],
+  	"weakAgainst": ["psychic","steel"],
+  	"immuneAgainst": ["dark"]
+  },
+  "ice": {
+  	"name": "Ice",
+  	"strongAgainst": ["dragon","flying","grass","ground"],
+  	"weakAgainst": ["fire","ice","steel","water"],
+  	"immuneAgainst": []
+  },
+  "dragon": {
+  	"name": "Dragon",
+  	"strongAgainst": ["dragon"],
+  	"weakAgainst": ["steel"],
+  	"immuneAgainst": []
+  },
+  "dark": {
+  	"name": "Dark",
+  	"strongAgainst": ["ghost","psychic"],
+  	"weakAgainst": ["dark","fighting","steel"],
+  	"immuneAgainst": []
+  },
+}
