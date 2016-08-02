@@ -161,6 +161,11 @@ public class Story implements Disposable {
 	public List<String> getFlavours() {
 		return this.flavours;
 	}
+
+	/**
+	 * @return The {@link ResourceManager} for this story.
+	 */
+	public ResourceManager getResourceManager() { return this.resourceManager; }
 	
 	@Override
 	public String toString() {

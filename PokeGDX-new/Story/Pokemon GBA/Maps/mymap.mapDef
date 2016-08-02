@@ -1,0 +1,12 @@
+{
+  "name": "Route 1",
+  "tileset": "Kanto",
+  "width": 2,
+  "height": 2,
+  "layers": 3,
+  "tiles": [
+    [0, 0, 0, 0],
+    [-1, -1, -1, -1],
+    [-1, -1, -1, -1]
+  ]
+}
