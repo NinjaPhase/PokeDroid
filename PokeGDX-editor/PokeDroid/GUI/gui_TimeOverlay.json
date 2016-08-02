@@ -1,0 +1,16 @@
+{
+    "name": "Time Overlay",
+    "is_overlay": true,
+    "components": [
+        {
+            "type": "window",
+            "size": [312, 96],
+            "position": ["topleft", 0, 0],
+        },
+        {
+            "type": "text",
+            "text": "TIME: {$time.formathour}:{$time.formatminute}\nMAP: {$map.uppername} ({$player.x},{$player.y})",
+            "position": ["topleft", 24, 22]
+        }
+    ]
+}

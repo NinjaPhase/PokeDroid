@@ -1,0 +1,31 @@
+{
+    "name": "PT:Oak",
+    "map": ["Pallet Town", 6, 4],
+    "default_graphic": "Graphics/oak.png",
+    "pages":
+    [
+        {
+            "events": {
+            	"0": ["Condition", ["Switch", "gotpoke", "false"], {
+            		"1": ["Message", "Oh hello, {$player.name}, would you like a DRAGONITE?"],
+                    "2": ["Select", ["YES", "NO"], "temp"],
+                    "3": ["Condition", ["Variable", "temp", "=", 0], {
+            		      "3": ["Give_Pokemon", ["dragonite", 75]],
+            		      "4": ["Message", "You retreived a DRAGONITE Lv75."],
+            		      "5": ["Message", "OAK: Take good care of DRAGONITE."],
+            		      "6": ["Switch", "gotpoke", "true"],
+                    }, {
+            		      "7": ["Message", "OAK: Oh, that's too bad."],
+                    }],
+            	}, {
+            		"8": ["Message", "OAK: I hope you are raising your DRAGONITE well."],
+            	}],
+            },
+            "graphic": "Graphics/oak.png",
+            "condition": [
+                
+            ],
+            "cause": "interact"
+        },
+    ]
+}

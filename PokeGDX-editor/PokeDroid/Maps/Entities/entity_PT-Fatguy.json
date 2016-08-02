@@ -1,0 +1,30 @@
+{
+    "name": "PT:FatGuy",
+    "map": ["Pallet Town", 13, 3],
+    "default_graphic": "Graphics/fatguy.png",
+    "pages":
+    [
+        {
+            "events": {
+                "0": ["Variable", "temp", "rand", 0, 2],
+                "1": ["Condition", ["Variable", "temp", "=", 0], {
+                    "2": ["Message", "I'm going to set the fatguy variable to Spanners.\nThis is no problem for me!"],
+                    "3": ["Variable", "fatguy", "set", "Spanners"]
+                }],
+                "4": ["Condition", ["Variable", "temp", "=", 1], {
+                    "5": ["Message", "I'm going to set the fatguy variable to Dr Who."],
+                    "6": ["Variable", "fatguy", "set", "Dr Who"]
+                }],
+                "7": ["Condition", ["Variable", "temp", "=", 2], {
+                    "8": ["Message", "I'm going to set the fatguy variable to GUI Test."],
+                    "9": ["Variable", "fatguy", "set", "GUI Test"]
+                }],
+            },
+            "graphic": "Graphics/fatguy.png",
+            "condition": [
+                
+            ],
+            "cause": "interact"
+        },
+    ]
+}

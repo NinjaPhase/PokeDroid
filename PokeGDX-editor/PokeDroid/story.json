@@ -1,0 +1,13 @@
+{
+    "name": "POKEDROID STORY",
+    "author": "Joshua",
+    "description": "The PokeDroid official story.\nThis story uses UNREAL time.",
+    "flavours": ["firered", "leafgreen"],
+    "characters": ["Graphics/red.png"],
+    "start_map": ["Pallet Town", 10, 8],
+    "start_event": {
+        
+    },
+    "time_type": "unreal",
+    "time_speed": 75000
+}

@@ -1,0 +1,27 @@
+{
+    "name": "PT:MW",
+    "map": ["Route 1", 6, 11],
+    "default_graphic": "Graphics/martworker.png",
+    "pages":
+    [
+        {
+            "events": {
+                "0": ["Condition", ["switch", "mw:gotpotion", "false"], {
+                    "1": ["Message", "Hi!"],
+                    "2": ["Message", "I work at a POKéMON MART.\nIt's part of a convenient chain selling all sorts of items."],
+                    "3": ["Message", "Please, visit us in VIRIDIAN CITY.\nI know, I'll give you a sample. Here you go!"],
+                    "4": ["Message", "Obtained the POTION!"],
+                    "5": ["Message", "NinjaPhase put the POTION away in the BAG's ITEMS POCKET."],
+                    "6": ["Switch", "mw:gotpotion", "true"]
+                }, {
+                    "7": ["Message", "Please come see us if you need POKéBALLS for catching POKéMON."],
+                }],
+            },
+            "graphic": "Graphics/martworker.png",
+            "condition": [
+                
+            ],
+            "cause": "interact"
+        },
+    ]
+}
