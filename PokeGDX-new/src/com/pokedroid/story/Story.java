@@ -4,15 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.SerializationException;
+import com.pokedroid.map.TileMap;
+import com.pokedroid.map.TileSet;
 import com.pokedroid.util.ResourceManager;
 
 /**
@@ -27,9 +28,9 @@ public class Story implements Disposable {
 
 	private String name;
 	private String author;
+	private FileHandle storyFile;
 	private ResourceManager resourceManager;
 	private List<String> flavours;
-	private FileHandle storyFile;
 
 	/**
 	 * <p>Constructs an empty {@code Story}.</p>
@@ -37,6 +38,7 @@ public class Story implements Disposable {
 	 * @param file The main .zip or directory.
 	 */
 	public Story(FileHandle file) {
+		this.storyFile = file;
 		this.resourceManager = new ResourceManager();
 		this.flavours = Collections.synchronizedList(new ArrayList<>());
 		getInfo(file);
@@ -47,8 +49,8 @@ public class Story implements Disposable {
 	 */
 	public void load() {
 		if(storyFile.isDirectory()) {
-			loadStoryFromDirectory(storyFile);
-		} else if(storyFile.extension().toLowerCase() == "zip") {
+			loadStoryFromDirectory(storyFile, "/", new ArrayDeque<>(), new ArrayDeque<>());
+		} else if(storyFile.extension().toLowerCase().equalsIgnoreCase("zip")) {
 			loadStoryFromZip(storyFile);
 		} else throw new StoryLoadException("Story is incompatable type " + storyFile.extension());
 	}
@@ -58,13 +60,10 @@ public class Story implements Disposable {
 	 * 
 	 * @param file The file.
 	 */
-	protected void getInfo(FileHandle file) {
+	private void getInfo(FileHandle file) {
 		if(file.isDirectory()) {
-			for(FileHandle f : file.list(".storyDef")) {
-				parseInfoFile(f.read());
-				break;
-			}
-		} else if(file.extension().toLowerCase() == "zip") {
+			parseInfoFile(file.list(".storyDef")[0].read());
+		} else if(file.extension().toLowerCase().equalsIgnoreCase("zip")) {
 			loadStoryFromZip(file);
 		} else throw new StoryLoadException("Story is incompatible type " + file.extension());
 	}
@@ -75,7 +74,7 @@ public class Story implements Disposable {
 	 * 
 	 * @param stream The stream.
 	 */
-	protected void parseInfoFile(InputStream stream) {
+	private void parseInfoFile(InputStream stream) {
 		JsonValue json = null;
 		InputStreamReader isr = null;
 		BufferedReader br = null;
@@ -117,7 +116,7 @@ public class Story implements Disposable {
 	 * 
 	 * @param file The file.
 	 */
-	protected void loadStoryFromZip(FileHandle file) {
+	private void loadStoryFromZip(FileHandle file) {
 
 	}
 
@@ -126,8 +125,31 @@ public class Story implements Disposable {
 	 * 
 	 * @param dir The directory.
 	 */
-	protected void loadStoryFromDirectory(FileHandle dir) {
-
+	private void loadStoryFromDirectory(FileHandle dir, String path,
+										Queue<FileHandle> tilesets, Queue<FileHandle> tilemaps) {
+		for(FileHandle f : dir.list()) {
+			if(f.isDirectory())
+				loadStoryFromDirectory(f, path + f.name() + '/', tilesets, tilemaps);
+			else {
+				if(f.extension().equalsIgnoreCase("tileDef"))
+					tilesets.add(f);
+				else if(f.extension().equalsIgnoreCase("mapDef"))
+					tilemaps.add(f);
+				else if(f.extension().equalsIgnoreCase("png"))
+					resourceManager.load(path + f.name(), new Texture(f));
+			}
+		}
+		if(path.equals("/")) {
+			FileHandle f;
+			while((f = tilesets.poll()) != null) {
+				TileSet ts = new TileSet(this, new JsonReader().parse(f));
+				resourceManager.load(ts.getName(), ts);
+			}
+			while((f = tilemaps.poll()) != null) {
+				TileMap map = new TileMap(this, new JsonReader().parse(f));
+				resourceManager.load(map.getName(), map);
+			}
+		}
 	}
 
 	@Override

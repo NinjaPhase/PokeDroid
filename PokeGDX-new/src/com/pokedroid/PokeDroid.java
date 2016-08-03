@@ -43,14 +43,16 @@ public class PokeDroid implements ApplicationListener {
 	private ResourceManager resourceManager;
 	private SceneManager sceneManager;
 
+	private Story loadedStory;
 	private Map<String, Story> story;
 
 	@Override
 	public void create() {
 		this.story = Collections.synchronizedMap(new LinkedHashMap<>());
 
-		Story story = new Story(Gdx.files.local("./Story/Pokemon GBA/"));
-		this.story.put(story.getName(), story);
+		this.loadedStory = new Story(Gdx.files.local("./Story/Pokemon GBA/"));
+		this.story.put(this.loadedStory.getName(), this.loadedStory);
+		this.loadedStory.load();
 
 		this.batch = new SpriteBatch();
 		this.resourceManager = new ResourceManager();
@@ -87,6 +89,7 @@ public class PokeDroid implements ApplicationListener {
 	@Override
 	public void dispose() {
 		this.sceneManager.dispose();
+		this.loadedStory.dispose();
 		this.resourceManager.dispose();
 		Species.clearRegistry();
 	}

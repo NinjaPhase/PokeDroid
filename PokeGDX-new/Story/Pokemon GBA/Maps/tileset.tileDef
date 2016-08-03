@@ -2,5 +2,5 @@
   "name": "Kanto",
   "tile_width": 32,
   "tile_height": 32,
-  "tileset_path": "/Graphics/tileset.png"
+  "tileset_path": "/Maps/johto.png"
 }
