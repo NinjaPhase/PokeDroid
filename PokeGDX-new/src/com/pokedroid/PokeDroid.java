@@ -114,6 +114,11 @@ public class PokeDroid implements ApplicationListener {
 	}
 
 	/**
+	 * @return The currently loaded story if one is loaded.
+	 */
+	public Story getLoadedStory() { return this.loadedStory; }
+
+	/**
 	 * <p>The {@code Main} code.</p>
 	 * 
 	 * @param args The program arguments.

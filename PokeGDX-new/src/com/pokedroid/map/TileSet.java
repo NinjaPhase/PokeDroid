@@ -52,6 +52,14 @@ public class TileSet implements Disposable {
     }
 
     /**
+     * @param i The tile index.
+     * @return The texture of the tile.
+     */
+    public TextureRegion getTile(int i) {
+        return this.tiles[i];
+    }
+
+    /**
      * @return The name of the tileset.
      */
     public String getName() {

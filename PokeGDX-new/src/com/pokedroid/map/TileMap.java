@@ -47,6 +47,16 @@ public class TileMap implements Disposable {
     }
 
     /**
+     * @param l The layer.
+     * @param x The x position.
+     * @param y The y position.
+     * @return The tile at x and y.
+     */
+    public int getTileAt(int l, int x, int y) {
+        return this.tiles[l][x + (y * width)];
+    }
+
+    /**
      * @return The name of this {@code TileMap}.
      */
     public String getName() {
@@ -65,6 +75,13 @@ public class TileMap implements Disposable {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * @return The layer count of the {@code TileMap}.
+     */
+    public int getLayerCount() {
+        return this.tiles.length;
     }
 
     /**

@@ -35,6 +35,7 @@ public class SceneTitleMenu implements IScene {
 	private int selected;
 	private ChoiceBox mainMenu;
 	private MessageBoxSkin messageBoxSkin;
+	private boolean focused;
 
 	@Override
 	public void create(PokeDroid game) {
@@ -52,6 +53,7 @@ public class SceneTitleMenu implements IScene {
 				new Object[]{"NEW GAME", "LOAD GAME", "ACHIEVEMENTS", "STORY SELECT", "EXIT"});
 		music.setLooping(true);
 		music.play();
+		this.focused = true;
 	}
 
 	@Override
@@ -61,6 +63,8 @@ public class SceneTitleMenu implements IScene {
 
 	@Override
 	public void render(Batch batch) {
+		if(!this.focused)
+			return;
 		this.mainMenu.render(batch, 0.0f, Gdx.graphics.getHeight()-mainMenu.getHeight());
 		batch.draw(titlePokemon,
 				Gdx.graphics.getWidth()-titlePokemon.getWidth()-64.0f,
@@ -74,12 +78,12 @@ public class SceneTitleMenu implements IScene {
 
 	@Override
 	public void focusGained() {
-
+		this.focused = true;
 	}
 
 	@Override
 	public void focusLost() {
-
+		this.focused = false;
 	}
 
 	@Override
@@ -98,7 +102,7 @@ public class SceneTitleMenu implements IScene {
 		} else if(keycode == Keys.Z) {
 			if(selected == 0) {
 				music.stop();
-				game.getSceneManager().push(new SceneBattle());
+				game.getSceneManager().push(new SceneMap());
 			} else if(selected == 3) {
 				
 			} else if(selected == 4) {
