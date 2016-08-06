@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="editor.editor-1.0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/editor/build/libs/editor-1.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
