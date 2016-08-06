@@ -8,6 +8,9 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
+import com.alee.managers.notification.NotificationIcon;
+import com.alee.managers.notification.NotificationManager;
+import com.alee.managers.notification.WebInnerNotification;
 import com.pokedroid.editor.gui.MainGUI;
 import com.pokedroid.editor.map.TileMap;
 
@@ -28,11 +31,13 @@ import javax.swing.SpinnerNumberModel;
 public class EditMapDialog extends WebDialog implements ActionListener {
 
     private MainGUI mainGUI;
+    private TileMap map;
     private WebPanel pnlGeneral, pnlButtons;
     private WebTextField txtName;
     private WebSpinner spWidth, spHeight;
     private WebButton btnOk, btnCancel;
     private WebComboBox cbTilesets;
+    private String originalName;
 
     /**
      * <p>
@@ -45,6 +50,8 @@ public class EditMapDialog extends WebDialog implements ActionListener {
     public EditMapDialog(MainGUI mainGUI, TileMap map) {
         super(mainGUI, "Edit Map Properties", true);
         this.mainGUI = mainGUI;
+        this.map = map;
+        this.originalName = map.getName();
         getContentPane().setLayout(new BorderLayout());
         pnlGeneral = new WebPanel(new GridLayout(3, 2));
         {
@@ -82,6 +89,26 @@ public class EditMapDialog extends WebDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == btnOk) {
+            if (txtName.getText().length() <= 0) {
+                final WebInnerNotification mapNote = new WebInnerNotification();
+                mapNote.setContent("Map name cannot be empty!");
+                mapNote.setDisplayTime(1000);
+                mapNote.setIcon(NotificationIcon.warning);
+                NotificationManager.showInnerNotification(mainGUI, mapNote);
+                return;
+            } else if(!txtName.getText().equals(originalName) &&
+                    mainGUI.getStory().getMaps().containsKey(txtName.getText())) {
+                final WebInnerNotification mapNote = new WebInnerNotification();
+                mapNote.setContent("A map with that name already exists.");
+                mapNote.setDisplayTime(1000);
+                mapNote.setIcon(NotificationIcon.warning);
+                NotificationManager.showInnerNotification(mainGUI, mapNote);
+                return;
+            }
+            map.setName(txtName.getText());
+            mainGUI.getStory().getMaps().remove(originalName);
+            mainGUI.getStory().getMaps().put(map.getName(), map);
+            map.resize((int)spWidth.getValue(), (int)spHeight.getValue());
             mainGUI.getMapList().repaint();
             this.dispose();
         } else if(e.getSource() == btnCancel) {
