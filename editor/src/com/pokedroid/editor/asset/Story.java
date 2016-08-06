@@ -2,14 +2,20 @@ package com.pokedroid.editor.asset;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -60,9 +66,115 @@ public class Story {
 	public Story(File f) {
 		this("Loaded Story");
 		this.file = f;
-		this.loadImagesFromDirectory(f, "");
-		this.loadTilesetFromDirectory(f);
-		this.loadMapFromDirectory(f);
+		if(f.isDirectory()) {
+			this.loadImagesFromDirectory(f, "");
+			this.loadTilesetFromDirectory(f);
+			this.loadMapFromDirectory(f);
+		} else {
+			try {
+				this.loadImagesFromZip(f);
+				this.loadTilesetFromZip(f);
+				this.loadMapFromZip(f);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * <p>Loads images from a zip file.</p>
+	 *
+	 * @param zip The zip file.
+     */
+	private void loadImagesFromZip(File zip) {
+		FileInputStream fis = null;
+		ZipInputStream zis = null;
+		try {
+			fis = new FileInputStream(zip);
+			zis = new ZipInputStream(fis);
+			ZipEntry e;
+			while((e = zis.getNextEntry()) != null) {
+				if(e.getName().endsWith(".png")) {
+					String name = e.getName();
+					if(name.contains("/"))
+						name = name.substring(name.lastIndexOf('/')+1, name.length());
+					try {
+						this.images.put(name, ImageIO.read(zis));
+					} catch (IOException exc) {
+						throw new RuntimeException("Unable to load image", exc.getCause());
+					}
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to load from zip.", e.getCause());
+		} finally {
+			try {
+				if(fis != null)
+					fis.close();
+				if(zis != null)
+					zis.close();
+			} catch (IOException e) {}
+		}
+	}
+
+	/**
+	 * <p>Loads tilesets from a zip file.</p>
+	 *
+	 * @param zip The zip file.
+	 */
+	private void loadTilesetFromZip(File zip) {
+		FileInputStream fis = null;
+		ZipInputStream zis = null;
+		try {
+			fis = new FileInputStream(zip);
+			zis = new ZipInputStream(fis);
+			ZipEntry e;
+			while((e = zis.getNextEntry()) != null) {
+				if(e.getName().endsWith(".tilesetDef")) {
+					TileSet ts = new TileSet(new JSONObject(new JSONTokener(zis)), images);
+					this.tilesets.put(ts.toString(), ts);
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to load from zip.", e.getCause());
+		} finally {
+			try {
+				if(fis != null)
+					fis.close();
+				if(zis != null)
+					zis.close();
+			} catch (IOException e) {}
+		}
+	}
+
+	/**
+	 * <p>Loads maps from a zip file.</p>
+	 *
+	 * @param zip The zip file.
+	 */
+	private void loadMapFromZip(File zip) {
+		FileInputStream fis = null;
+		ZipInputStream zis = null;
+		try {
+			fis = new FileInputStream(zip);
+			zis = new ZipInputStream(fis);
+			ZipEntry e;
+			while((e = zis.getNextEntry()) != null) {
+				if(e.getName().endsWith(".mapDef")) {
+					TileMap tm = new TileMap(new JSONObject(new JSONTokener(zis)), tilesets);
+					this.maps.put(tm.getName(), tm);
+				}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to load from zip.", e.getCause());
+		} finally {
+			try {
+				if(fis != null)
+					fis.close();
+				if(zis != null)
+					zis.close();
+			} catch (IOException e) {}
+		}
 	}
 
 	/**
@@ -206,7 +318,47 @@ public class Story {
 				}
 			}
 		} else {
-
+			FileOutputStream fos = null;
+			ZipOutputStream zos = null;
+			try {
+				fos = new FileOutputStream(f);
+				zos = new ZipOutputStream(new BufferedOutputStream(fos));
+				ZipEntry ze;
+				for(String key : images.keySet()) {
+					String name = key.substring(key.lastIndexOf('/')+1, key.length());
+					String ext = key.substring(key.lastIndexOf('.')+1, key.length());
+					ze = new ZipEntry("assets/images/" + name);
+					zos.putNextEntry(ze);
+					ImageIO.write(images.get(key), ext, zos);
+					zos.closeEntry();
+				}
+				for(String key : tilesets.keySet()) {
+					ze = new ZipEntry("assets/tilesets/" + key.toLowerCase().replaceAll(" ", "_") + ".tilesetDef");
+					zos.putNextEntry(ze);
+					zos.write(tilesets.get(key).toJSON().getBytes());
+					zos.closeEntry();
+				}
+				for(String key : maps.keySet()) {
+					ze = new ZipEntry("assets/maps/" + key.toLowerCase().replaceAll(" ", "_") + ".mapDef");
+					zos.putNextEntry(ze);
+					zos.write(maps.get(key).toJSON().getBytes());
+					zos.closeEntry();
+				}
+				zos.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Thread.getDefaultUncaughtExceptionHandler().uncaughtException(
+						Thread.currentThread(), e.getCause());
+			} finally {
+				try {
+					if(zos != null) {
+						zos.finish();
+						zos.close();
+					}
+					if(fos != null)
+						fos.close();
+				} catch(IOException e) {}
+			}
 		}
 	}
 
