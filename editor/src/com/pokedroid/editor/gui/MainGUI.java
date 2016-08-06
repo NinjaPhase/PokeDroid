@@ -56,6 +56,8 @@ public class MainGUI extends JFrame {
 	 */
 	public MainGUI() {
 		super();
+		setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.75),
+				(int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.75));
 		this.map = null;
 		this.tileSelection = new TileSelection();
 		this.tileSelection.w = 1;
@@ -76,7 +78,8 @@ public class MainGUI extends JFrame {
 	private void loadProperties() {
 		this.props = new Properties();
 		try {
-			this.props.load(new FileReader(Config.CONFIG_FILE));
+			if(Config.CONFIG_FILE.exists())
+				this.props.load(new FileReader(Config.CONFIG_FILE));
 		} catch (IOException e) {
 			System.err.println("[MainGUI] Unable to read config file.");
 			e.printStackTrace();
@@ -121,6 +124,10 @@ public class MainGUI extends JFrame {
 		if(getTileMap() != null) {
 			splPane.setDividerLocation(
 					(getTileMap().getTileSet().getWidth() * 8) + mapPane.getVerticalScrollBar().getWidth());
+			tileSplit.setDividerLocation((int)(getHeight()*0.7));
+		} else {
+			splPane.setDividerLocation((32 * 8) + mapPane.getVerticalScrollBar().getWidth());
+			tileSplit.setDividerLocation((int)(getHeight()*0.7));
 		}
 		this.getContentPane().add(splPane, BorderLayout.CENTER);
 		this.setJMenuBar(new EditorMenuBar(this));
@@ -134,8 +141,6 @@ public class MainGUI extends JFrame {
 	private void setupFrame() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Mappy - The PokeDroid Editor");
-		setSize((int) (Toolkit.getDefaultToolkit().getScreenSize().width * 0.75),
-				(int) (Toolkit.getDefaultToolkit().getScreenSize().height * 0.75));
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
