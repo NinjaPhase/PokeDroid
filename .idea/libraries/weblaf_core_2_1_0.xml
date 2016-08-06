@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="weblaf-core-2.1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.sciss/weblaf-core/2.1.0/56e5a621e9cb2ee35e25339081525ba20751d58e/weblaf-core-2.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.sciss/weblaf-core/2.1.0/243d70fef3414c5beacd81d7408a0034d39e7c92/weblaf-core-2.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

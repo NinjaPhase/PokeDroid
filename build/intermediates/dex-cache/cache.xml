@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Joshua\git\PokeDroid\core\build\libs\core-1.0.jar"
+        jar="C:\Users\Joshua\Documents\git\PokeDroid\core\build\libs\core-1.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="bba7888010c807c76ae7d12ea232f0e37c35df99">
-        <dex dex="C:\Users\Joshua\git\PokeDroid\android\build\intermediates\pre-dexed\debug\core-1.0-c7d5e83768a3c3431bb092a9f896cda72ca8e80b.jar" />
+        sha1="385d86f01c64cb9d1905773754d8830e390d151b">
+        <dex dex="C:\Users\Joshua\Documents\git\PokeDroid\android\build\intermediates\pre-dexed\debug\core-1.0_9b5f23db81167e59d3db3cd9d45e8f5190a3b9bd.jar" />
     </item>
 
 </items>

@@ -136,4 +136,9 @@ public class SceneMap implements Scene {
 		return false;
 	}
 
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
 }

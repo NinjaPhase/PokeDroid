@@ -236,8 +236,9 @@ public abstract class HumanEntity extends Entity {
 	
 	/**
 	 * <p>Causes a jump to the point x and y.</p>
-	 * 
-	 * @param x The x position.
+	 *
+	 * @param amount The amount to jump.
+	 * @param direction The direction to jump in.
 	 */
 	public void jump(int amount, EntityDirection direction) {
 		if(direction == EntityDirection.DIRECTION_DOWN || direction == EntityDirection.DIRECTION_UP) {
@@ -262,9 +263,7 @@ public abstract class HumanEntity extends Entity {
 	 * @return Whether the {@code HumanEntity} can move.
 	 */
 	protected boolean canMove(int x, int y) {
-		if(map == null)
-			return true;
-		return map.canMove(x, y);
+		return map == null || map.canMove(x, y);
 	}
 
 	/**

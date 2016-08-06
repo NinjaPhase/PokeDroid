@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\Joshua\git\PokeDroid\android\res"><file name="ic_launcher" path="C:\Users\Joshua\git\PokeDroid\android\res\drawable-hdpi\ic_launcher.png" qualifiers="hdpi" type="drawable"/><file name="ic_launcher" path="C:\Users\Joshua\git\PokeDroid\android\res\drawable-mdpi\ic_launcher.png" qualifiers="mdpi" type="drawable"/><file name="ic_launcher" path="C:\Users\Joshua\git\PokeDroid\android\res\drawable-xhdpi\ic_launcher.png" qualifiers="xhdpi" type="drawable"/><file name="ic_launcher" path="C:\Users\Joshua\git\PokeDroid\android\res\drawable-xxhdpi\ic_launcher.png" qualifiers="xxhdpi" type="drawable"/><file path="C:\Users\Joshua\git\PokeDroid\android\res\values\strings.xml" qualifiers=""><string name="app_name">PokeDroid</string></file><file path="C:\Users\Joshua\git\PokeDroid\android\res\values\styles.xml" qualifiers=""><style name="GdxTheme" parent="android:Theme">
-		<item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowFullscreen">true</item>
-    </style></file></source><source path="C:\Users\Joshua\git\PokeDroid\android\build\generated\res\rs\release"/><source path="C:\Users\Joshua\git\PokeDroid\android\build\generated\res\generated\release"/></dataSet><dataSet config="release"><source path="C:\Users\Joshua\git\PokeDroid\android\src\release\res"/></dataSet><mergedItems/></merger>

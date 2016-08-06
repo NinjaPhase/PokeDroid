@@ -19,19 +19,19 @@ public interface Scene extends Disposable {
 	 * 
 	 * @param game The game to bind to the {@code Scene}.
 	 */
-	public void create(PokeDroid game);
+	void create(PokeDroid game);
 	
 	/**
 	 * <p>Updates the {@code Scene}.<p>
 	 * 
 	 * @param timeDelta The delta time.
 	 */
-	public void update(float timeDelta);
+	void update(float timeDelta);
 	
 	/**
 	 * <p>Renders the {@code Scene}.</p>
 	 */
-	public void render();
+	void render();
 	
 	/**
 	 * <p>An event caused by resizing the window.</p>
@@ -39,10 +39,10 @@ public interface Scene extends Disposable {
 	 * @param width The width.
 	 * @param height The height.
 	 */
-	public void resize(int width, int height);
+	void resize(int width, int height);
 	
 	@Override
-	public void dispose();
+	void dispose();
 	
 	/**
 	 * <p>An event caused by a key being pressed.</p>
@@ -50,7 +50,7 @@ public interface Scene extends Disposable {
 	 * @param keycode The keycode.
 	 * @return Whether the input was processed.
 	 */
-	public boolean keyDown(int keycode);
+	boolean keyDown(int keycode);
 	
 	/**
 	 * <p>An event caused by a key being released.</p>
@@ -58,6 +58,8 @@ public interface Scene extends Disposable {
 	 * @param keycode The keycode.
 	 * @return Whether the input was processed.
 	 */
-	public boolean keyUp(int keycode);
+	boolean keyUp(int keycode);
+
+	boolean keyTyped(char character);
 	
 }

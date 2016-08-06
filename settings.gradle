@@ -1,1 +1,2 @@
+include ':editor'
 include 'desktop', 'core', 'android'

@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.pokedroid.input.OnscreenControls;
-import com.pokedroid.registry.TilesetRegistry;
 import com.pokedroid.scene.Scene;
 import com.pokedroid.scene.SceneManager;
 import com.pokedroid.scene.SceneSplash;
@@ -47,8 +46,8 @@ public class PokeDroid extends ApplicationAdapter implements InputProcessor {
 		if(Gdx.input.getInputProcessor() != null)
 			Gdx.input.setInputProcessor(new InputMultiplexer(Gdx.input.getInputProcessor(), this));
 		else Gdx.input.setInputProcessor(this);
-		if(Gdx.app.getType() == ApplicationType.Android)
-			controls = new OnscreenControls(this);
+		if(Gdx.app.getType() == ApplicationType.Android || true)
+			this.controls = new OnscreenControls(this);
 		this.storyList = Collections.synchronizedList(new ArrayList<Story>());
 		JsonValue stories = new JsonReader().parse(Gdx.files.internal("storylist.json"));
 		for(int i = 0; i < stories.get("stories").size; i++)
@@ -84,7 +83,6 @@ public class PokeDroid extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public void dispose() {
 		sceneManager.dispose();
-		TilesetRegistry.dispose();
 		story.dispose();
 	}
 
@@ -116,44 +114,34 @@ public class PokeDroid extends ApplicationAdapter implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		Scene s = sceneManager.getCurrentScene();
-		if(s != null)
-			return s.keyDown(keycode);
-		return false;
+		return s != null && s.keyDown(keycode);
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
 		Scene s = sceneManager.getCurrentScene();
-		if(s != null)
-			return s.keyUp(keycode);
-		return false;
+		return s != null && s.keyUp(keycode);
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
-		return false;
+		Scene s = sceneManager.getCurrentScene();
+		return s != null && s.keyTyped(character);
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(controls != null && controls.touchDown(screenX, screenY, pointer, button))
-			return true;
-		return false;
+		return controls != null && controls.touchDown(screenX, screenY, pointer, button);
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if(controls != null && controls.touchUp(screenX, screenY, pointer, button))
-			return true;
-		return false;
+		return controls != null && controls.touchUp(screenX, screenY, pointer, button);
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if(controls != null && controls.touchDragged(screenX, screenY, pointer))
-			return true;
-		return false;
+		return controls != null && controls.touchDragged(screenX, screenY, pointer);
 	}
 
 	@Override

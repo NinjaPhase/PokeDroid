@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="gdx-backend-headless-1.7.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-headless/1.7.0/7b1f71a02052b65e958154017b353f9f0d7bd2c9/gdx-backend-headless-1.7.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx-backend-headless/1.7.0/11a4f53828746473e5c1285d235a38672727c872/gdx-backend-headless-1.7.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
