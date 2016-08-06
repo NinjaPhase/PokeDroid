@@ -1,3 +1,12 @@
+# Build Instructions
+
+When first cloning the project use clean and then build.
+
+To build using gradle run the build task in the main build.gradle
+
+To run the application use the desktop/android build.gradle and use the run task
+To run the editor use the editors build.gradle and use the run task
+
 # PokeDroid for Users
 ## Introduction
 PokeDroid (Initially YAPJE) is an Desktop and Android Java driven Pokémon Engine.
