@@ -103,6 +103,28 @@ public class TileMap {
 	}
 
 	/**
+	 * <p>Resizes the tilemap.</p>
+	 *
+	 * @param width The new width.
+	 * @param height The new height.
+     */
+	public void resize(int width, int height) {
+		int[][] tileCopy = this.tiles.clone();
+		this.tiles = new int[tileCopy.length][width*height];
+		for(int l = 0; l < tileCopy.length; l++) {
+			for(int y = 0; y < height; y++) {
+				for(int x = 0; x < width; x++) {
+					if(x >= this.width || y >= this.height)
+						continue;
+					this.tiles[l][x + (y * width)] = tileCopy[l][x + (y * this.width)];
+				}
+			}
+		}
+		this.width = width;
+		this.height = height;
+	}
+
+	/**
 	 * <p>
 	 * Gets the {@code TileMap} as a JSON string.
 	 * </p>

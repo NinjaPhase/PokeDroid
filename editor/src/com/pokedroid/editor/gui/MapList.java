@@ -1,16 +1,20 @@
 package com.pokedroid.editor.gui;
 
+import com.pokedroid.editor.gui.dialog.EditMapDialog;
 import com.pokedroid.editor.map.TileMap;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 /**
@@ -20,10 +24,13 @@ import javax.swing.tree.TreePath;
  * @author NinjaPhase
  * @version 05 August 2016
  */
-public class MapList extends JPanel implements MouseListener {
+public class MapList extends JPanel implements ActionListener, MouseListener {
 
     private MainGUI mainGUI;
     private JTree mapTree;
+    private JPopupMenu tilemapPopMenu;
+    private JMenuItem jmiMapProperties;
+    private TileMap selectedTileMap;
 
     /**
      * <p>Constructs a new MapList.</p>
@@ -37,6 +44,12 @@ public class MapList extends JPanel implements MouseListener {
         buildTree();
         this.add(mapTree);
         mapTree.addMouseListener(this);
+        this.tilemapPopMenu = new JPopupMenu();
+        {
+            this.jmiMapProperties = new JMenuItem("Map Properties");
+            this.jmiMapProperties.addActionListener(this);
+            this.tilemapPopMenu.add(jmiMapProperties);
+        }
     }
 
     /**
@@ -62,12 +75,21 @@ public class MapList extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getClickCount() >= 2) {
-            TreePath p = mapTree.getClosestPathForLocation(e.getX(), e.getY());
+        if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
+            TreePath p = mapTree.getSelectionPath();
             if(p != null) {
                 Object o = ((DefaultMutableTreeNode) p.getLastPathComponent()).getUserObject();
                 if(o instanceof TileMap) {
                     mainGUI.setTileMap((TileMap) o);
+                }
+            }
+        } else if(e.getButton() == MouseEvent.BUTTON3) {
+            TreePath p = mapTree.getSelectionPath();
+            if(p != null) {
+                Object o = ((DefaultMutableTreeNode) p.getLastPathComponent()).getUserObject();
+                if(o instanceof TileMap) {
+                    this.selectedTileMap = (TileMap) o;
+                    this.tilemapPopMenu.show(this.mapTree, e.getX(), e.getY());
                 }
             }
         }
@@ -87,4 +109,12 @@ public class MapList extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == jmiMapProperties && selectedTileMap != null) {
+            new EditMapDialog(mainGUI, selectedTileMap);
+        }
+    }
+
 }
