@@ -152,10 +152,14 @@ public class MainGUI extends JFrame {
      */
 	public void setStory(Story s) {
 		this.story = s;
-		if(this.story.getMaps().size() > 0) {
-			this.setTileMap(story.getMaps().entrySet().iterator().next().getValue());
+		if(s == null) {
+
+		} else {
+			if (this.story.getMaps().size() > 0) {
+				this.setTileMap(story.getMaps().entrySet().iterator().next().getValue());
+			}
+			this.getMapList().buildTree();
 		}
-		this.getMapList().buildTree();
 		this.repaint();
 	}
 

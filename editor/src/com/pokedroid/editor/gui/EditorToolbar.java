@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JToggleButton;
 
 import com.pokedroid.editor.gui.brush.Brush;
@@ -13,6 +14,7 @@ import com.pokedroid.editor.gui.brush.BrushRegistry;
 
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.toolbar.WebToolBar;
+import com.pokedroid.editor.gui.dialog.ResourceDialog;
 
 /**
  * <p>
@@ -29,6 +31,7 @@ public class EditorToolbar extends WebToolBar implements ActionListener {
 
 	private MainGUI mainGUI;
 	private WebComboBox cbBrushes;
+	private JButton btnResource;
 	private JToggleButton btnToggleGrid, btnToggleDim;
 	private JToggleButton btnLayerOne, btnLayerTwo, btnLayerThree, btnEntity;
 	private ButtonGroup btnGroupLayers;
@@ -57,6 +60,8 @@ public class EditorToolbar extends WebToolBar implements ActionListener {
 		this.add(createButton(btnLayerTwo = new JToggleButton("2"), false, btnGroupLayers));
 		this.add(createButton(btnLayerThree = new JToggleButton("3"), false, btnGroupLayers));
 		this.add(createButton(btnEntity = new JToggleButton("E"), false, btnGroupLayers));
+		this.addSeparator();
+		this.add(createButton(btnResource = new JButton("Resource Manager"), false));
 		this.setFloatable(false);
 	}
 
@@ -105,6 +110,8 @@ public class EditorToolbar extends WebToolBar implements ActionListener {
 		} else if (e.getSource() == cbBrushes) {
 			Brush b = (Brush) cbBrushes.getSelectedItem();
 			mainGUI.getMapDisplay().setCurrentBrush(b);
+		} else if (e.getSource() == btnResource) {
+			new ResourceDialog(mainGUI);
 		}
 	}
 

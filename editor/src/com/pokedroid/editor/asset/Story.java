@@ -37,6 +37,7 @@ import javax.imageio.ImageIO;
 public class Story {
 
 	private String name;
+	private String character;
 	private File file;
 	private Map<String, BufferedImage> images;
 	private Map<String, TileMap> maps;
@@ -362,6 +363,13 @@ public class Story {
 		}
 	}
 
+	/**
+	 * <p>Recursive delete for files with certain extensions to be
+	 * resaved.</p>
+	 *
+	 * @param dir The directory.
+	 * @param ext The extension list.
+     */
 	private void delete(File dir, String[] ext) {
 		for(File f : dir.listFiles()) {
 			if(f.isDirectory()) {
@@ -373,6 +381,20 @@ public class Story {
 				}
 			}
 		}
+	}
+
+	/**
+	 * <p>Gets the .storyDef json information.</p>
+	 *
+	 * @return The .storyDef json information.
+     */
+	public String getStoryJSON() {
+		StringBuilder str = new StringBuilder();
+		str.append("{\n");
+		str.append("\t\"name\": \"" + this.name + "\",\n");
+		str.append("\t\"characters\": [\"" + this.character + "\"]\n");
+		str.append("}");
+		return str.toString();
 	}
 
 	/**
